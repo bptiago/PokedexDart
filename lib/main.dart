@@ -4,7 +4,7 @@ import 'package:pokedexdart/provider/pokemon_favorites.dart';
 import 'package:pokedexdart/views/pokedex_main_screen.dart';
 
 // TODO
-// 1) FIX NA BARRA DE PESQUISA
+// 1) FIX NA BARRA DE PESQUISA (NÃO TÁ ACHANDO AO PESQUISAR O NOME)
 // 2) BOTÃO DE FAVORITAR ESTÁ POUCO VISÍVEL NA TELA DE DETALHES DO POKEMON
 // 3) AS INFORMAÇÕES DA TELA DE DETALHES ESTÃO BEM MÍNIMAS
 // 4) DEIXAR O DESIGN MAIS BONITINHO
