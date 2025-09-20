@@ -18,17 +18,14 @@ class PokemonDetails {
   });
 
   factory PokemonDetails.fromJson(Map<String, dynamic> json) {
-    // Extrai os tipos do JSON
     var typesList = (json['types'] as List)
         .map((typeInfo) => typeInfo['type']['name'] as String)
         .toList();
 
-    // Extrai as habilidades do JSON
     var abilitiesList = (json['abilities'] as List)
         .map((abilityInfo) => abilityInfo['ability']['name'] as String)
         .toList();
 
-    // Obtém a URL da artwork oficial
     String imageUrl =
         json['sprites']['other']['official-artwork']['front_default'];
 
