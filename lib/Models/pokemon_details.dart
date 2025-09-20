@@ -1,3 +1,29 @@
+class Stat {
+  final String name;
+  final int baseStat;
+
+  Stat({required this.name, required this.baseStat});
+
+  String get displayName {
+    switch (name) {
+      case 'hp':
+        return 'HP';
+      case 'attack':
+        return 'Ataque';
+      case 'defense':
+        return 'Defesa';
+      case 'special-attack':
+        return 'Atq. Especial';
+      case 'special-defense':
+        return 'Def. Especial';
+      case 'speed':
+        return 'Velocidade';
+      default:
+        return name;
+    }
+  }
+}
+
 class PokemonDetails {
   final int id;
   final String name;
@@ -6,6 +32,7 @@ class PokemonDetails {
   final List<String> abilities;
   final int height;
   final int weight;
+  final List<Stat> stats;
 
   PokemonDetails({
     required this.id,
@@ -15,6 +42,7 @@ class PokemonDetails {
     required this.abilities,
     required this.height,
     required this.weight,
+    required this.stats,
   });
 
   factory PokemonDetails.fromJson(Map<String, dynamic> json) {
@@ -26,8 +54,15 @@ class PokemonDetails {
         .map((abilityInfo) => abilityInfo['ability']['name'] as String)
         .toList();
 
+    var statsList = (json['stats'] as List).map((statInfo) {
+      return Stat(
+        name: statInfo['stat']['name'] as String,
+        baseStat: statInfo['base_stat'] as int,
+      );
+    }).toList();
+
     String imageUrl =
-        json['sprites']['other']['official-artwork']['front_default'];
+    json['sprites']['other']['official-artwork']['front_default'];
 
     return PokemonDetails(
       id: json['id'],
@@ -37,6 +72,7 @@ class PokemonDetails {
       abilities: abilitiesList,
       height: json['height'],
       weight: json['weight'],
+      stats: statsList,
     );
   }
 }

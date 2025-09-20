@@ -16,20 +16,25 @@ class PokemonDetailScreen extends StatelessWidget {
       appBar: AppBar(
         title: Text(pokemon.name[0].toUpperCase() + pokemon.name.substring(1)),
         actions: [
-          // O Consumer reconstrói apenas o ícone quando o estado de favoritos muda.
-          Consumer<FavoritesProvider>(
-            builder: (context, provider, child) {
-              final isFavorite = provider.isFavorite(pokemon);
-              return IconButton(
-                icon: Icon(
-                  isFavorite ? Icons.star : Icons.star_border,
-                  color: isFavorite ? Colors.amber : Colors.white,
-                ),
-                onPressed: () {
-                  provider.toggleFavorite(pokemon);
-                },
-              );
-            },
+          Padding(
+            padding: const EdgeInsets.only(right: 8.0),
+            child: Consumer<FavoritesProvider>(
+              builder: (context, provider, child) {
+                final isFavorite = provider.isFavorite(pokemon);
+
+                return IconButton(
+                  padding: EdgeInsets.zero,
+                  icon: Icon(
+                    Icons.star,
+                    color: isFavorite ? Colors.amber : Colors.grey,
+                    size: 30,
+                  ),
+                  onPressed: () {
+                    provider.toggleFavorite(pokemon);
+                  },
+                );
+              },
+            ),
           ),
         ],
       ),
@@ -63,7 +68,6 @@ class PokemonDetailScreen extends StatelessWidget {
                   ),
                   const SizedBox(height: 10),
                   _buildDetailCard(
-                    context,
                     'Tipos',
                     Wrap(
                       spacing: 8.0,
@@ -73,17 +77,16 @@ class PokemonDetailScreen extends StatelessWidget {
                     ),
                   ),
                   _buildDetailCard(
-                    context,
                     'Habilidades',
                     Text(details.abilities.join(', ')),
                   ),
+                  // Novo Card para os Status Base
+                  _buildStatsCard(details.stats),
                   _buildDetailCard(
-                    context,
                     'Altura',
                     Text('${details.height / 10} m'),
                   ),
                   _buildDetailCard(
-                    context,
                     'Peso',
                     Text('${details.weight / 10} kg'),
                   ),
@@ -97,7 +100,7 @@ class PokemonDetailScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildDetailCard(BuildContext context, String title, Widget content) {
+  Widget _buildDetailCard(String title, Widget content) {
     return Card(
       margin: const EdgeInsets.symmetric(vertical: 8.0),
       child: ListTile(
@@ -105,6 +108,58 @@ class PokemonDetailScreen extends StatelessWidget {
         subtitle: Padding(
           padding: const EdgeInsets.only(top: 8.0),
           child: content,
+        ),
+      ),
+    );
+  }
+
+  Widget _buildStatsCard(List<Stat> stats) {
+    return Card(
+      margin: const EdgeInsets.symmetric(vertical: 8.0),
+      child: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const Text('Status Base',
+                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
+            const SizedBox(height: 10),
+            ...stats.map((stat) {
+              const double maxStatValue = 180.0;
+              return Padding(
+                padding: const EdgeInsets.symmetric(vertical: 4.0),
+                child: Row(
+                  children: [
+                    Expanded(
+                      flex: 3,
+                      child: Text(stat.displayName,
+                          style: const TextStyle(fontWeight: FontWeight.w500)),
+                    ),
+                    Expanded(
+                      flex: 1,
+                      child: Text(stat.baseStat.toString()),
+                    ),
+                    Expanded(
+                      flex: 6,
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(8.0),
+                        child: LinearProgressIndicator(
+                          value: stat.baseStat / maxStatValue,
+                          minHeight: 12,
+                          backgroundColor: Colors.grey[300],
+                          color: stat.baseStat > 90
+                              ? Colors.green
+                              : stat.baseStat > 50
+                              ? Colors.orange
+                              : Colors.red,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              );
+            }).toList(),
+          ],
         ),
       ),
     );
