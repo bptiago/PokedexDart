@@ -12,6 +12,6 @@ Grupo:
 - Listar Pokémon em grade  
 - Detalhes de cada Pokémon  
 - Favoritar e ver favoritos  
-- Busca opcional  
+- Busca por Pokémon  
 - Feedback de carregamento/erros  
   
